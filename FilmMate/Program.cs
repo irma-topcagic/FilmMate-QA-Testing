@@ -15,11 +15,6 @@ class Program
         var userService = new UserService(userRepo);
         var filmService = new FilmService(filmRepo);
 
-        if (!userRepo.GetAll().Any(k => k.getKorisnickoIme() == "admin"))
-        {
-             Console.WriteLine("Inicijalni admin kreiran: admin / admin123");
-        }
-
 
         while (true)
         {
@@ -72,7 +67,7 @@ class Program
         {
             Console.WriteLine("\n--- Gledalac Meni ---");
             Console.WriteLine("1. Prikaz svih filmova");
-            Console.WriteLine("2. Pretraga, Filtriranje, Sortiranje i Ocjenjivanje");
+            Console.WriteLine("2. Pretraga, Filtriranje i Sortiranje");
             Console.WriteLine("0. Nazad (Odjava)");
             Console.Write("Odabir: ");
             string odabir = Console.ReadLine() ?? "";
