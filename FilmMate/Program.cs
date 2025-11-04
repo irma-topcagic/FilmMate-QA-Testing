@@ -1,15 +1,25 @@
 ﻿using FilmMate.Data;
 using FilmMate.Services;
 using FilmMate.Models;
+using System;
+using System.Linq;
 
 class Program
 {
     static void Main()
     {
+        Console.WriteLine("--- FilmMate Aplikacija Pokrenuta ---");
+
         var userRepo = new UserRepository();
         var filmRepo = new FilmRepository();
         var userService = new UserService(userRepo);
         var filmService = new FilmService(filmRepo);
+
+        if (!userRepo.GetAll().Any(k => k.getKorisnickoIme() == "admin"))
+        {
+             Console.WriteLine("Inicijalni admin kreiran: admin / admin123");
+        }
+
 
         while (true)
         {
@@ -27,6 +37,7 @@ class Program
                     GledalacMeni(gledalac, filmService);
             }
             else if (izbor == "3") break;
+            else Console.WriteLine("Pogrešan unos!");
         }
     }
 
@@ -35,7 +46,8 @@ class Program
         bool nazad = false;
         while (!nazad)
         {
-            Console.WriteLine("\n1. Dodaj film\n2. Ažuriraj film\n3. Obriši film\n4. Prikaz filmova\n5. Pretraga/Filtriranje filmova\n6. Prikaz svih kategorija\n7. Sortiraj Filmove\n0. Nazad");
+            Console.WriteLine("\n--- Admin Meni ---");
+            Console.WriteLine("1. Dodaj film\n2. Ažuriraj film\n3. Obriši film\n4. Prikaz filmova\n5. Pretraga/Filtriranje filmova\n6. Prikaz svih kategorija\n7. Sortiraj Filmove\n0. Nazad");
             string odabir = Console.ReadLine() ?? "";
 
             switch (odabir)
@@ -46,7 +58,7 @@ class Program
                 case "4": fs.prikaziFilmove(); break;
                 case "5": fs.FiltrirajPretraziFilmove(); break;
                 case "6": fs.PrikaziJedinstveneKategorije(); break;
-                case "7": SortirajMeni(fs); break;
+                case "7": SortirajMeni.PrikaziSortirajMeni(fs); break;
                 case "0": nazad = true; break;
                 default: Console.WriteLine("Pogrešan unos!"); break;
             }
@@ -58,10 +70,9 @@ class Program
         bool nazad = false;
         while (!nazad)
         {
-            Console.WriteLine("\n--- Meni Gledaoca ---");
+            Console.WriteLine("\n--- Gledalac Meni ---");
             Console.WriteLine("1. Prikaz svih filmova");
-            Console.WriteLine("2. Pretraga/Filtriranje filmova");
-            Console.WriteLine("3. Sortiraj Filmove");
+            Console.WriteLine("2. Pretraga, Filtriranje, Sortiranje i Ocjenjivanje");
             Console.WriteLine("0. Nazad (Odjava)");
             Console.Write("Odabir: ");
             string odabir = Console.ReadLine() ?? "";
@@ -69,33 +80,60 @@ class Program
             switch (odabir)
             {
                 case "1": fs.prikaziFilmove(); break;
-                case "2": gledalac.pretragaFilmova(fs); break;
-                case "3": SortirajMeni(fs); break;
+                case "2": gledalac.pretragaFilmova(fs); break; 
                 case "0": nazad = true; break;
                 default: Console.WriteLine("Pogrešan unos!"); break;
             }
         }
     }
+}
 
-    static void SortirajMeni(FilmService fs)
+public static class SortirajMeni
+{
+    public static void PrikaziSortirajMeni(FilmService fs)
     {
         bool nazad = false;
         while (!nazad)
         {
             Console.WriteLine("\n--- Sortiranje Filmova ---");
-            Console.WriteLine("1. Po Ocjeni (Najmanja -> Najveća)");
-            Console.WriteLine("2. Po Godini Izlaska (Najstariji -> Najnoviji)");
-            Console.WriteLine("3. Po Nazivu (A-Z)");
-            Console.WriteLine("0. Nazad");
-            string odabir = Console.ReadLine() ?? "";
+            Console.WriteLine("1. Po Ocjeni\n2. Po Godini Izlaska\n3. Po Nazivu\n0. Nazad");
+            Console.Write("Odaberite kriterij: ");
+            string odabirKriterija = Console.ReadLine() ?? "";
 
-            switch (odabir)
+            if (odabirKriterija == "0") { nazad = true; continue; }
+            
+            if (odabirKriterija == "1" || odabirKriterija == "2" || odabirKriterija == "3")
             {
-                case "1": fs.SortirajPoOcjeni(); break;
-                case "2": fs.SortirajPoGodini(); break;
-                case "3": fs.SortirajPoNazivu(); break;
-                case "0": nazad = true; break;
-                default: Console.WriteLine("Pogrešan unos!"); break;
+                 Console.WriteLine("Odaberite smjer:\n  A. Rastuće (Ascending)\n  D. Opadajuće (Descending)");
+                 Console.Write("Smjer (A/D): ");
+                 string smjerOdabir = Console.ReadLine()?.ToUpper() ?? "";
+
+                 bool smjerRastuci;
+                 
+                 if (smjerOdabir == "A")
+                 {
+                      smjerRastuci = true;
+                 }
+                 else if (smjerOdabir == "D")
+                 {
+                      smjerRastuci = false;
+                 }
+                 else
+                 {
+                      Console.WriteLine("Neispravan odabir smjera.");
+                      continue;
+                 }
+
+                 switch (odabirKriterija)
+                 {
+                     case "1": fs.SortirajPoOcjeni(smjerRastuci); break;
+                     case "2": fs.SortirajPoGodini(smjerRastuci); break;
+                     case "3": fs.SortirajPoNazivu(smjerRastuci); break;
+                 }
+            }
+            else
+            {
+                Console.WriteLine("Pogrešan unos!");
             }
         }
     }
