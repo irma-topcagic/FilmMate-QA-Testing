@@ -66,5 +66,6 @@ namespace FilmMate.Models
             
             return $"{nazivFilma} | {kategorija} | {godinaIzlaska} | Prosjek: {getOcjena():F2} ({ocjene.Count} ocjena)";
         }
+     
     }
 }
