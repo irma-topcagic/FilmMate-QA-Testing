@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.IO;
 using FilmMate.Models;
 
 namespace FilmMate.Data
 {
-    public class FilmRepository
+    public class FilmRepository : IFilmRepository
     {
         private string filePath = "filmovi.txt";
         private List<Film> filmovi = new List<Film>();

@@ -11,9 +11,10 @@ namespace FilmMate.Services
 {
     public class FilmService
     {
-        private FilmRepository repo;
+        private IFilmRepository repo;
 
-        public FilmService(FilmRepository filmRepo)
+        
+        public FilmService(IFilmRepository filmRepo)
         {
             repo = filmRepo;
         }
