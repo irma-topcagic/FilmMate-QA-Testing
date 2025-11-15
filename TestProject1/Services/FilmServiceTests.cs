@@ -136,7 +136,7 @@ public class FilmServiceRateTests
         mockRepo.Verify(repo => repo.Sacuvaj(), Times.Once,
             "Sacuvaj() mora biti pozvana nakon uspješnog dodavanja filma.");
 
-        StringAssert.Contains(consoleOutput.ToString(), "Film uspješno dodan!");
+        StringAssert.Contains(consoleOutput.ToString(), "Film uspješno dodat!");
     }
 
     [Test]
