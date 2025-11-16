@@ -9,11 +9,12 @@ using FilmMate.Data;
 
 namespace FilmMate.Services
 {
-    public class FilmService
+    public class FilmService :IFilmService
     {
         private IFilmRepository repo;
-
         
+
+
         public FilmService(IFilmRepository filmRepo)
         {
             repo = filmRepo;
