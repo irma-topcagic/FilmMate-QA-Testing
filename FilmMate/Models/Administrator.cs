@@ -10,9 +10,9 @@ namespace FilmMate.Models
 {
     public class Administrator : Korisnik
     {
-        public void dodajFilm(IFilmService filmService) => filmService.dodajFilm();
-        public void obrisiFilm(IFilmService filmService) => filmService.obrisiFilm();
-        public void azurirajFilm(IFilmService filmService) => filmService.azurirajFilm();
+        public void dodajFilm(FilmService filmService) => filmService.dodajFilm();
+        public void obrisiFilm(FilmService filmService) => filmService.obrisiFilm();
+        public void azurirajFilm(FilmService filmService) => filmService.azurirajFilm();
     }
 }
 

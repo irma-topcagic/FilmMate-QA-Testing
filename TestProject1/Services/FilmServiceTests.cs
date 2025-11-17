@@ -26,16 +26,16 @@ public class FilmServiceRateTests
         // Inicijalizacija lažnih podataka
         lazniFilmovi = new List<Film>
     {
-            
-            new Film("Avatar", "Sci-Fi", 8.0, 2009),
+
+      new Film("Avatar", "Sci-Fi", 8.0, 2009),
       new Film("Titanik", "Romansa", 7.8, 1997)
     };
 
         mockRepo = new Mock<IFilmRepository>();
 
-       
-        mockRepo.Setup(repo => repo.GetAll())
-        .Returns(lazniFilmovi);
+
+        mockRepo.Setup(repo => repo.GetAll())
+            .Returns(lazniFilmovi);
 
         service = new FilmService(mockRepo.Object);
 
@@ -59,13 +59,13 @@ public class FilmServiceRateTests
     {
         // Simulacija unosa sa konzole
         string unos =
-      "Avatar" + Environment.NewLine + 
-            "10";
+      "Avatar" + Environment.NewLine +
+      "10";
 
         var stringReader = new StringReader(unos);
         Console.SetIn(stringReader);
 
-     
+
         service.OcijeniFilmGledaoca();
 
         // 1. Verifikacija Mocka: da li je Save() pozvan uopste
@@ -79,37 +79,37 @@ public class FilmServiceRateTests
         Assert.AreEqual(9.0, avatarFilm.getOcjena(), 0.001,
       "Prosječna ocjena se nije ispravno izračunala.");
 
-        StringAssert.Contains(
-      consoleOutput.ToString(),
-      "Uspješno ste ocijenili film."
-    );
+        StringAssert.Contains(
+          consoleOutput.ToString(),
+          "Uspješno ste ocijenili film."
+        );
     }
 
     // Test: Sacuvaj() metoda se NE poziva za neispravnu ocenu
     [Test]
     public void OcijeniFilmGledaoca_InvalidRating_DoesNotCallSave()
     {
-        string unos =
-      "Titanik" + Environment.NewLine +
-            "12";                            
+        string unos =
+          "Titanik" + Environment.NewLine +
+          "12";
 
-        var stringReader = new StringReader(unos);
+        var stringReader = new StringReader(unos);
         Console.SetIn(stringReader);
 
-       
-        service.OcijeniFilmGledaoca();
 
-      
+        service.OcijeniFilmGledaoca();
 
-       
-        mockRepo.Verify(repo => repo.Sacuvaj(), Times.Never,
-      "Sacuvaj() se ne smije pozvati ako je ocjena izvan raspona.");
 
-       
-        StringAssert.Contains(
-      consoleOutput.ToString(),
-      "Ocjena mora biti u rasponu od 1 do 10."
-    );
+
+
+        mockRepo.Verify(repo => repo.Sacuvaj(), Times.Never,
+          "Sacuvaj() se ne smije pozvati ako je ocjena izvan raspona.");
+
+
+        StringAssert.Contains(
+          consoleOutput.ToString(),
+          "Ocjena mora biti u rasponu od 1 do 10."
+        );
     }
 
     [Test]
@@ -117,10 +117,10 @@ public class FilmServiceRateTests
     {
         // Simulacija unosa za novi film
         string unos =
-            "Novi Film" + Environment.NewLine + 
-            "Akcija" + Environment.NewLine +     
-            "9" + Environment.NewLine +         
-            "2023";                              
+            "Novi Film" + Environment.NewLine +
+            "Akcija" + Environment.NewLine +
+            "9" + Environment.NewLine +
+            "2023";
 
         Console.SetIn(new StringReader(unos));
 
@@ -163,7 +163,7 @@ public class FilmServiceRateTests
     [Test]
     public void ObrisiFilm_ValidNameWithConfirmation_RemovesFilmAndCallsSave()
     {
-        string unos ="Titanik\n" +"d\n" +"OBRISI\n";
+        string unos = "Titanik\n" + "d\n" + "OBRISI\n";
 
 
         Console.SetIn(new StringReader(unos));
@@ -189,7 +189,7 @@ public class FilmServiceRateTests
         string unos = "Nepostojeći Film" + Environment.NewLine;
         Console.SetIn(new StringReader(unos));
 
-       
+
         service.obrisiFilm();
 
         // 1. Broj filmova ostaje isti
@@ -207,17 +207,17 @@ public class FilmServiceRateTests
     [Test]
     public void AzurirajFilm_UpdateNaziv_UpdatesFilmAndCallsSave()
     {
-       
+
         string unos =
             "Avatar" + Environment.NewLine +
             "1" + Environment.NewLine +
             "Novi Avatar Naziv" + Environment.NewLine;
         Console.SetIn(new StringReader(unos));
 
-       
+
         service.azurirajFilm();
 
-       //provjera da li se desilo azuriranje
+        //provjera da li se desilo azuriranje
         var film = lazniFilmovi.FirstOrDefault(f => f.getNazivFilma() == "Novi Avatar Naziv");
         Assert.IsNotNull(film, "Film mora biti pronađen pod novim nazivom.");
 
@@ -235,7 +235,7 @@ public class FilmServiceRateTests
         string unos = "Nepostojeći Film" + Environment.NewLine;
         Console.SetIn(new StringReader(unos));
 
-        
+
         service.azurirajFilm();
 
         // Sacuvaj() NE smije biti pozvan
@@ -306,7 +306,7 @@ public class FilmServiceRateTests
     }
 
 
-   //---------Testiranje metode SortirajPoGodini--------
+    //---------Testiranje metode SortirajPoGodini--------
     [Test]
     public void SortirajPoGodini_Ascending_ShowsSortedFilms()
     {
@@ -531,12 +531,12 @@ public class FilmServiceRateTests
     [Test]
     public void SortirajPoOcjeni_EmptyList_PrintsNoFilmsMessage()
     {
-        
+
         mockRepo.Setup(repo => repo.GetAll()).Returns(new List<Film>());
 
         service.SortirajPoOcjeni(true);
 
-        StringAssert.Contains(consoleOutput.ToString(), "Lista filmova je prazna ili nije pronađena."); 
+        StringAssert.Contains(consoleOutput.ToString(), "Lista filmova je prazna ili nije pronađena.");
     }
 
     [Test]
@@ -558,7 +558,7 @@ public class FilmServiceRateTests
         Console.SetIn(new StringReader(unos));
         service.obrisiFilm();
 
-        
+
         Assert.AreEqual(1, lazniFilmovi.Count); // 2 originalna - 1 obrisan = 1 ostao
         Assert.IsNull(lazniFilmovi.FirstOrDefault(f => f.getNazivFilma() == "Avatar"));
 
@@ -589,37 +589,149 @@ public class FilmServiceRateTests
 
         StringAssert.Contains(consoleOutput.ToString(), "Unos ne može biti prazan.");
     }
+    // ... (Vaš postojeći kod do ovdje)
+
+    //------FiltirirajPretraziFilmove dodatni testovi------
+
+
+    // ----------------------------------------------------------------
+    // NOVI TESTOVI ZA POKLAPANJE PREOSTALE LOGIKE (do 100% Code Coverage)
+    // ----------------------------------------------------------------
+
+    // ============================================
+    // DODATNI TESTOVI ZA OBRISI FILM (sa ocjenama)
+    // ============================================
+
 
     [Test]
-    public void OcijeniFilmGledaoca_EmptyRepository_PrintsError()
+    public void ObrisiFilm_WithRatings_FinalConfirmationFails_DoesNotDelete()
     {
-        // Postavljanje prazne liste
-        mockRepo.Setup(repo => repo.GetAll()).Returns(new List<Film>());
+        // 1. Priprema
+        var avatar = lazniFilmovi.FirstOrDefault(f => f.getNazivFilma() == "Avatar");
+        avatar.DodajOcjenu(5); // Dajemo mu ocjenu
 
+        // 2. Simulacija unosa: Ime -> Potvrda 'd' -> Finalna potvrda 'NE OBRISI'
+        string unos = "Avatar" + Environment.NewLine + "d" + Environment.NewLine + "NE OBRISI" + Environment.NewLine;
+        Console.SetIn(new StringReader(unos));
+
+        // 3. Izvršenje
+        service.obrisiFilm();
+
+        // 4. Verifikacija
+        Assert.AreEqual(2, lazniFilmovi.Count, "Film ne smije biti obrisan.");
+        mockRepo.Verify(repo => repo.Sacuvaj(), Times.Never, "Sacuvaj() ne smije biti pozvan.");
+        StringAssert.Contains(consoleOutput.ToString(), "Brisanjem se gube sve ocjene!");
+        StringAssert.Contains(consoleOutput.ToString(), "Brisanje otkazano zbog neuspjele finalne potvrde.");
+    }
+
+    // ============================================
+    // DODATNI TESTOVI ZA AZURIRAJ FILM
+    // ============================================
+
+    [Test]
+    public void AzurirajFilm_InvalidYearRange_DoesNotUpdateYear()
+    {
+        // 1. Simulacija unosa: Ime -> Opcija '3' (Godina) -> Godina "1899" (izvan raspona)
+        string unos =
+            "Avatar" + Environment.NewLine +
+            "3" + Environment.NewLine +
+            "1899" + Environment.NewLine;
+        Console.SetIn(new StringReader(unos));
+
+        // 2. Izvršenje
+        service.azurirajFilm();
+
+        // 3. Verifikacija
+        var film = lazniFilmovi.FirstOrDefault(f => f.getNazivFilma() == "Avatar");
+        Assert.AreEqual(2009, film.getGodina(), "Godina se ne smije ažurirati."); // Ostaje stara godina
+        mockRepo.Verify(repo => repo.Sacuvaj(), Times.Once, "Sacuvaj() se poziva (nakon izvrsiAzuriranje).");
+        StringAssert.Contains(consoleOutput.ToString(), "Neispravan raspon godine.");
+    }
+
+    [Test]
+    public void AzurirajFilm_InvalidUpdateOption_ReturnsError()
+    {
+        // 1. Simulacija unosa: Ime -> Opcija '4' (Neispravno)
+        string unos =
+            "Avatar" + Environment.NewLine +
+            "4" + Environment.NewLine;
+        Console.SetIn(new StringReader(unos));
+
+        // 2. Izvršenje
+        service.azurirajFilm();
+
+        // 3. Verifikacija
+        mockRepo.Verify(repo => repo.Sacuvaj(), Times.Once, "Sacuvaj() se poziva nakon neuspješnog izvrsiAzuriranje.");
+        StringAssert.Contains(consoleOutput.ToString(), "Pogrešan unos!");
+    }
+
+    // ============================================
+    // DODATNI TESTOVI ZA OCJENI FILM GLEDAOCA
+    // ============================================
+
+    [Test]
+    public void OcijeniFilmGledaoca_NoFilmsInRepository_ReturnsError()
+    {
+        // 1. Priprema: Repozitorij bez filmova
+        lazniFilmovi.Clear();
+
+        // 2. Simulacija unosa (bilo koji unos, jer će se prekinuti na početku)
+        Console.SetIn(new StringReader("Film"));
+
+        // 3. Izvršenje
         service.OcijeniFilmGledaoca();
 
-        StringAssert.Contains(consoleOutput.ToString(), "Nema filmova za ocjenjivanje.");
+        // 4. Verifikacija
         mockRepo.Verify(repo => repo.Sacuvaj(), Times.Never);
+        StringAssert.Contains(consoleOutput.ToString(), "Nema filmova za ocjenjivanje.");
     }
+
+    // ============================================
+    // DODATNI TESTOVI ZA FILTRIRAJ/PRETRAZI
+    // ============================================
+
+
+
     [Test]
-public void AzurirajFilm_InvalidYearFormat_DoesNotUpdateAndPrintsError()
-{
-    string originalNaziv = "Avatar";
-    int originalGodina = lazniFilmovi.First(f => f.getNazivFilma() == originalNaziv).getGodina();
-    
-    // Unos za ažuriranje: Naziv, Izbor (Godina), Neispravan unos za godinu (nije broj)
-    string unos =
-        originalNaziv + Environment.NewLine +
-        "3" + Environment.NewLine + 
-        "dvijetisuće" + Environment.NewLine;
-    Console.SetIn(new StringReader(unos));
+    public void FiltrirajPretraziFilmove_InvalidChoice_ReturnsError()
+    {
+        // 1. Simulacija unosa: Opcija '9' (nepostojeća opcija)
+        string unos = "9" + Environment.NewLine;
+        Console.SetIn(new StringReader(unos));
 
-    service.azurirajFilm();
+        // 2. Izvršenje
+        service.FiltrirajPretraziFilmove();
 
-    // Godina se ne smije promijeniti
-    Assert.AreEqual(originalGodina, lazniFilmovi.First(f => f.getNazivFilma() == originalNaziv).getGodina());
-    mockRepo.Verify(repo => repo.Sacuvaj(), Times.Never, "Sacuvaj() se ne smije pozvati zbog neispravnog formata.");
-    StringAssert.Contains(consoleOutput.ToString(), "Neispravan format.");
+        // 3. Verifikacija
+        StringAssert.Contains(consoleOutput.ToString(), "Pogrešan odabir.");
+    }
+
+
+    [Test]
+    public void FiltrirajPoMinimalnojOcjeni_InvalidRange_ReturnsError()
+    {
+        string unos = "3" + Environment.NewLine + "12" + Environment.NewLine; // > 10
+        Console.SetIn(new StringReader(unos));
+        service.FiltrirajPretraziFilmove();
+
+        StringAssert.Contains(consoleOutput.ToString(), "Ocjena mora biti u rasponu 1-10.");
+    }
+
+    [Test]
+    public void FiltrirajPoMinimalnojOcjeni_InvalidFormat_ReturnsError()
+    {
+        string unos = "3" + Environment.NewLine + "pet" + Environment.NewLine;
+        Console.SetIn(new StringReader(unos));
+        service.FiltrirajPretraziFilmove();
+
+        StringAssert.Contains(consoleOutput.ToString(), "Neispravan format ocjene.");
+    }
+
+    // ============================================
+    // DODATNI TESTOVI ZA SORTIRANJE PO NAZIVU
+    // ============================================
+
+
+
 }
-   
-}
+

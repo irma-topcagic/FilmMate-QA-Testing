@@ -1,7 +1,7 @@
-﻿using FilmMate.Models; 
+﻿using FilmMate.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using System.Linq; 
+using System.Linq;
 using TestProject1.TestData;
 
 namespace FilmMate.Tests.Models
@@ -80,7 +80,7 @@ namespace FilmMate.Tests.Models
         }
         public static IEnumerable<object[]> GetCsvTestData()
         {
-           
+
             return CsvDataLoader.GetTestData<FilmTestData>("TestData/TestData.csv");
         }
 

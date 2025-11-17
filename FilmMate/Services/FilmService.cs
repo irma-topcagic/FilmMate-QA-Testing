@@ -9,10 +9,9 @@ using FilmMate.Data;
 
 namespace FilmMate.Services
 {
-    public class FilmService :IFilmService
+    public class FilmService
     {
         private IFilmRepository repo;
-        
 
 
         public FilmService(IFilmRepository filmRepo)
@@ -280,7 +279,7 @@ namespace FilmMate.Services
             }
         }
 
-        public void FiltrirajPretraziFilmove()
+        public virtual void FiltrirajPretraziFilmove()
         {
             if (repo.GetAll().Count == 0)
             {
@@ -515,7 +514,7 @@ namespace FilmMate.Services
             }
         }
 
-        public void prikaziFilmove()
+        public virtual void prikaziFilmove()
         {
             PrikaziListuFilmova(repo.GetAll(), "Svi Filmovi u Bazi");
         }

@@ -75,7 +75,7 @@ class Program
             switch (odabir)
             {
                 case "1": fs.prikaziFilmove(); break;
-                case "2": gledalac.pretragaFilmova(fs); break; 
+                case "2": gledalac.pretragaFilmova(fs); break;
                 case "0": nazad = true; break;
                 default: Console.WriteLine("Pogrešan unos!"); break;
             }
@@ -96,35 +96,35 @@ public static class SortirajMeni
             string odabirKriterija = Console.ReadLine() ?? "";
 
             if (odabirKriterija == "0") { nazad = true; continue; }
-            
+
             if (odabirKriterija == "1" || odabirKriterija == "2" || odabirKriterija == "3")
             {
-                 Console.WriteLine("Odaberite smjer:\n  A. Rastuće (Ascending)\n  D. Opadajuće (Descending)");
-                 Console.Write("Smjer (A/D): ");
-                 string smjerOdabir = Console.ReadLine()?.ToUpper() ?? "";
+                Console.WriteLine("Odaberite smjer:\n  A. Rastuće (Ascending)\n  D. Opadajuće (Descending)");
+                Console.Write("Smjer (A/D): ");
+                string smjerOdabir = Console.ReadLine()?.ToUpper() ?? "";
 
-                 bool smjerRastuci;
-                 
-                 if (smjerOdabir == "A")
-                 {
-                      smjerRastuci = true;
-                 }
-                 else if (smjerOdabir == "D")
-                 {
-                      smjerRastuci = false;
-                 }
-                 else
-                 {
-                      Console.WriteLine("Neispravan odabir smjera.");
-                      continue;
-                 }
+                bool smjerRastuci;
 
-                 switch (odabirKriterija)
-                 {
-                     case "1": fs.SortirajPoOcjeni(smjerRastuci); break;
-                     case "2": fs.SortirajPoGodini(smjerRastuci); break;
-                     case "3": fs.SortirajPoNazivu(smjerRastuci); break;
-                 }
+                if (smjerOdabir == "A")
+                {
+                    smjerRastuci = true;
+                }
+                else if (smjerOdabir == "D")
+                {
+                    smjerRastuci = false;
+                }
+                else
+                {
+                    Console.WriteLine("Neispravan odabir smjera.");
+                    continue;
+                }
+
+                switch (odabirKriterija)
+                {
+                    case "1": fs.SortirajPoOcjeni(smjerRastuci); break;
+                    case "2": fs.SortirajPoGodini(smjerRastuci); break;
+                    case "3": fs.SortirajPoNazivu(smjerRastuci); break;
+                }
             }
             else
             {
