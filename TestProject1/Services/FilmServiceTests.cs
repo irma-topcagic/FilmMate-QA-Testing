@@ -590,4 +590,36 @@ public class FilmServiceRateTests
         StringAssert.Contains(consoleOutput.ToString(), "Unos ne može biti prazan.");
     }
 
+    [Test]
+    public void OcijeniFilmGledaoca_EmptyRepository_PrintsError()
+    {
+        // Postavljanje prazne liste
+        mockRepo.Setup(repo => repo.GetAll()).Returns(new List<Film>());
+
+        service.OcijeniFilmGledaoca();
+
+        StringAssert.Contains(consoleOutput.ToString(), "Nema filmova za ocjenjivanje.");
+        mockRepo.Verify(repo => repo.Sacuvaj(), Times.Never);
+    }
+    [Test]
+public void AzurirajFilm_InvalidYearFormat_DoesNotUpdateAndPrintsError()
+{
+    string originalNaziv = "Avatar";
+    int originalGodina = lazniFilmovi.First(f => f.getNazivFilma() == originalNaziv).getGodina();
+    
+    // Unos za ažuriranje: Naziv, Izbor (Godina), Neispravan unos za godinu (nije broj)
+    string unos =
+        originalNaziv + Environment.NewLine +
+        "3" + Environment.NewLine + 
+        "dvijetisuće" + Environment.NewLine;
+    Console.SetIn(new StringReader(unos));
+
+    service.azurirajFilm();
+
+    // Godina se ne smije promijeniti
+    Assert.AreEqual(originalGodina, lazniFilmovi.First(f => f.getNazivFilma() == originalNaziv).getGodina());
+    mockRepo.Verify(repo => repo.Sacuvaj(), Times.Never, "Sacuvaj() se ne smije pozvati zbog neispravnog formata.");
+    StringAssert.Contains(consoleOutput.ToString(), "Neispravan format.");
+}
+   
 }

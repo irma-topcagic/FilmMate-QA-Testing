@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Linq; // Dodano za Any()
 
 namespace TestProject1.Models
 {
@@ -25,7 +26,6 @@ namespace TestProject1.Models
         {
             mockRepo = new Mock<IFilmRepository>();
 
-            // FilmService zahtijeva IFilmRepository u konstruktoru
             filmService = new FilmService(mockRepo.Object);
             gledalac = new Gledalac();
 
@@ -37,12 +37,6 @@ namespace TestProject1.Models
             sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
 
-            // Postavljanje mock repozitorija
-            var mockFilmovi = new List<Film> {
-                new Film("Avatar", "Sci-Fi", 8.0, 2009)
-            };
-            mockRepo.Setup(r => r.GetAll()).Returns(mockFilmovi);
-            mockRepo.Setup(r => r.Sacuvaj());
         }
 
         [TestCleanup]
@@ -56,26 +50,64 @@ namespace TestProject1.Models
         [TestMethod]
         public void PregledajFilmove_Poziva_prikaziFilmove_I_Ispisuje_Listu()
         {
+            // ARRANGE
+            var mockFilmovi = new List<Film> {
+                new Film("Avatar", "Sci-Fi", 8.0, 2009)
+            };
+            mockRepo.Setup(r => r.GetAll()).Returns(mockFilmovi);
+
+            Console.SetIn(new StringReader(""));
+
             // Act
             gledalac.pregledajFilmove(filmService);
 
             // Assert
-            // 1. Potvrđujemo da je FilmService pristupio Repozitoriju
             mockRepo.Verify(r => r.GetAll(), Times.AtLeastOnce(),
                 "Očekuje se poziv GetAll() iz Repozitorija za prikaz filmova.");
 
-            // 2. Potvrđujemo da je naslov (sa crticama) ispravno ispisan
             string consoleOutput = sb.ToString();
             Assert.IsTrue(consoleOutput.Contains("--- Svi Filmovi u Bazi ---"),
                 "Greška u formatiranju naslova 'Svi Filmovi u Bazi'.");
 
-            // 3. Potvrđujemo da je film ispravno ispisan
             Assert.IsTrue(consoleOutput.Contains("Avatar"),
                 "Očekivani film 'Avatar' nije pronađen u ispisu.");
         }
 
+        [TestMethod]
+        public void PretragaFilmovi_Poziva_FiltrirajPretraziFilmove_I_Vraca_Pravilan_Rezultat()
+        {
+            // ARRANGE
+            var mockFilmovi = new List<Film>
+            {
+                new Film("Avatar: Put Vode", "Sci-Fi", 9.0, 2022),
+                new Film("Avatar", "Sci-Fi", 8.0, 2009),
+                new Film("Titanik", "Romansa", 7.5, 1997)
+            };
+            mockRepo.Setup(r => r.GetAll()).Returns(mockFilmovi);
 
+            // Simulirani unos:
+            // 1. Odabir opcije "1" (Pretraga po Nazivu)
+            // 2. Unos dijela naziva ("Avatar")
+            // 3. Unos "0" (Izlazak iz petlje menija u FilmService)
+            string simulatedInput = "1\n" + "Avatar\n" + "0\n";
 
+            // Postavljanje privremenog ulaza konzole
+            Console.SetIn(new StringReader(simulatedInput));
+
+            // Act
+            gledalac.pretragaFilmova(filmService);
+
+            // Assert
+            string consoleOutput = sb.ToString();
+
+            Assert.IsTrue(consoleOutput.Contains("--- Filtriranje i Pretraga Filmova ---"),
+                "Naslov menija za pretragu nije pronađen ili je pogrešno formatiran.");
+
+            Assert.IsTrue(consoleOutput.Contains("Avatar: Put Vode"));
+            Assert.IsTrue(consoleOutput.Contains("Avatar"));
+            Assert.IsFalse(consoleOutput.Contains("Titanik"));
+
+            mockRepo.Verify(r => r.GetAll(), Times.AtLeastOnce());
+        }
     }
-
 }
