@@ -10,7 +10,6 @@ namespace TestProject1.Models
     [TestClass]
     public class KorisnikTests
     {
-        // Koristićemo Administratora za testiranje logike nasljedjivana
         private Administrator korisnik;
 
         [TestInitialize]

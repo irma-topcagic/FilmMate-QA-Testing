@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FilmMate.Data
 {
-    // NOVI FAJL ZA MOCKING
+    // FAJL NAPRAVLJEN ZA MOCKING
     public interface IFilmRepository
     {
         List<Film> GetAll();

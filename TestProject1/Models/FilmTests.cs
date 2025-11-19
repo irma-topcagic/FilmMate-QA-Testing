@@ -60,7 +60,6 @@ namespace FilmMate.Tests.Models
         public void SetteriIToString_PromjenaAtributa_TrebaVratitiIspravanToString(FilmTestData testData)
         {
             //  Kreiranje filma sa početnim podacima
-            // Konstruktor postavlja jednu ocjenu (5.0)
             var film = new Film(testData.PocetniNaziv, "Drama", 5.0, 2020);
 
             //  Korištenje settera

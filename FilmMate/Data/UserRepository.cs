@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO; // <-- DODATO ZBOG FILE OPERACIJA
+using System.IO; 
 
 using FilmMate.Models;
 
@@ -27,13 +27,12 @@ namespace FilmMate.Data
 
             if (!File.Exists(filePath)) return;
 
-            // File.ReadAllLines se automatski zatvara i oslobađa handle
             foreach (var line in File.ReadAllLines(filePath))
             {
                 var p = line.Split(';');
                 if (p.Length >= 3)
                 {
-                    string tip = p[2].Trim().ToLower(); // Dodato Trim/ToLower za sigurnost
+                    string tip = p[2].Trim().ToLower(); 
                     Korisnik k = (tip == "admin") ? new Administrator() : new Gledalac();
                     k.setKorisnickoIme(p[0].Trim());
                     k.setLozinka(p[1].Trim());

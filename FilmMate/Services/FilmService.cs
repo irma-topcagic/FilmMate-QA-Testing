@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 
 using FilmMate.Models;
-using FilmMate.Data; // Pretpostavka da su IFilmRepository i IFilmService ovde
+using FilmMate.Data; 
 
 namespace FilmMate.Services
 {
     public class FilmService : IFilmService
     {
-        // Ispravka: Ime polja je filmRepo
+        
         private IFilmRepository filmRepo;
 
         public FilmService(IFilmRepository repo)
         {
-            // Ispravna inicijalizacija
+            
             filmRepo = repo;
         }
 
@@ -32,7 +32,7 @@ namespace FilmMate.Services
             }
 
             bool postoji = false;
-            // KORIŠTENJE: filmRepo
+           
             foreach (var f in filmRepo.GetAll())
             {
                 if (f.getNazivFilma().ToLower() == naziv.ToLower())
@@ -72,9 +72,7 @@ namespace FilmMate.Services
             Console.Write("Godina: ");
             int godina = int.TryParse(Console.ReadLine(), out godina) ? godina : 0;
 
-            // KORIŠTENJE: filmRepo
             filmRepo.GetAll().Add(new Film(naziv, kat, ocjena, godina));
-            // KORIŠTENJE: filmRepo
             filmRepo.Sacuvaj();
             Console.WriteLine("Film uspješno dodat!");
         }
@@ -92,7 +90,6 @@ namespace FilmMate.Services
 
             Film filmZaBrisanje = null;
             bool pronadjen = false;
-            // KORIŠTENJE: filmRepo
             foreach (var f in filmRepo.GetAll())
             {
                 if (f.getNazivFilma().ToLower() == naziv.ToLower())
@@ -123,9 +120,7 @@ namespace FilmMate.Services
 
                         if (finalnaPotvrda == "OBRISI")
                         {
-                            // KORIŠTENJE: filmRepo
                             filmRepo.GetAll().Remove(filmZaBrisanje);
-                            // KORIŠTENJE: filmRepo
                             filmRepo.Sacuvaj();
                             Console.WriteLine("Film obrisan!");
                         }
@@ -136,9 +131,8 @@ namespace FilmMate.Services
                     }
                     else
                     {
-                        // KORIŠTENJE: filmRepo
                         filmRepo.GetAll().Remove(filmZaBrisanje);
-                        // KORIŠTENJE: filmRepo
+                        
                         filmRepo.Sacuvaj();
                         Console.WriteLine("Film obrisan!");
                     }
@@ -166,7 +160,6 @@ namespace FilmMate.Services
             }
 
             Film filmZaAzuriranje = null;
-            // KORIŠTENJE: filmRepo
             foreach (var f in filmRepo.GetAll())
             {
                 if (f.getNazivFilma().ToLower() == naziv.ToLower())
@@ -184,10 +177,8 @@ namespace FilmMate.Services
 
             izvrsiAzuriranje(filmZaAzuriranje);
 
-            // KORIŠTENJE: filmRepo
             if (filmRepo != null)
             {
-                // KORIŠTENJE: filmRepo
                 filmRepo.Sacuvaj();
                 Console.WriteLine("Film ažuriran!");
             }
@@ -238,7 +229,7 @@ namespace FilmMate.Services
 
         public void OcijeniFilmGledaoca()
         {
-            // KORIŠTENJE: filmRepo
+            
             if (filmRepo.GetAll().Count == 0)
             {
                 Console.WriteLine("Nema filmova za ocjenjivanje.");
@@ -255,7 +246,7 @@ namespace FilmMate.Services
             }
 
             Film filmZaOcjenjivanje = null;
-            // KORIŠTENJE: filmRepo
+            
             foreach (var f in filmRepo.GetAll())
             {
                 if (f.getNazivFilma().ToLower() == naziv.ToLower())
@@ -279,7 +270,7 @@ namespace FilmMate.Services
                 if (ocjena >= 1 && ocjena <= 10)
                 {
                     filmZaOcjenjivanje.DodajOcjenu(ocjena);
-                    // KORIŠTENJE: filmRepo
+                    
                     filmRepo.Sacuvaj();
                     Console.WriteLine($"Uspješno ste ocijenili film. Nova prosječna ocjena je {filmZaOcjenjivanje.getOcjena():F2}.");
                 }
@@ -296,7 +287,7 @@ namespace FilmMate.Services
 
         public virtual void FiltrirajPretraziFilmove()
         {
-            // KORIŠTENJE: filmRepo
+            
             if (filmRepo.GetAll().Count == 0)
             {
                 Console.WriteLine("Nema filmova za pretragu!");
@@ -353,7 +344,7 @@ namespace FilmMate.Services
                 return new List<Film>();
             }
 
-            // KORIŠTENJE: filmRepo
+           
             return filmRepo.GetAll()
                 .Where(f => f.getNazivFilma().ToLower().Contains(dioNaziva))
                 .ToList();
@@ -370,7 +361,7 @@ namespace FilmMate.Services
                 return new List<Film>();
             }
 
-            // KORIŠTENJE: filmRepo
+            
             return filmRepo.GetAll()
                 .Where(f => f.getKategorija().ToLower() == kategorija)
                 .ToList();
@@ -387,7 +378,7 @@ namespace FilmMate.Services
                     return new List<Film>();
                 }
 
-                // KORIŠTENJE: filmRepo
+               
                 return filmRepo.GetAll()
                     .Where(f => f.getOcjena() >= minOcjena)
                     .ToList();
@@ -399,7 +390,7 @@ namespace FilmMate.Services
             }
         }
 
-        // Merge i MergeSort metode (bez promjena, koristiće se filmRepo.GetAll() u sortiranju)
+        
         private List<Film> Merge(List<Film> left, List<Film> right, Func<Film, Film, bool> isLess)
         {
             if (left == null) left = new List<Film>();
@@ -410,7 +401,7 @@ namespace FilmMate.Services
 
             while (i < left.Count && j < right.Count)
             {
-                // Ako je element sa lijeve strane manji (prema kriteriju isLess)
+                
                 if (isLess(left[i], right[j]))
                 {
                     result.Add(left[i]);
@@ -418,20 +409,20 @@ namespace FilmMate.Services
                 }
                 else
                 {
-                    // U suprotnom, uzmi element sa desne strane
+                    
                     result.Add(right[j]);
                     j++;
                 }
             }
 
-            // Dodaj preostale elemente iz lijeve liste
+            
             while (i < left.Count)
             {
                 result.Add(left[i]);
                 i++;
             }
 
-            // Dodaj preostale elemente iz desne liste
+            
             while (j < right.Count)
             {
                 result.Add(right[j]);
@@ -469,7 +460,6 @@ namespace FilmMate.Services
             else
                 isLess = (f1, f2) => f1.getOcjena() > f2.getOcjena();
 
-            // KORIŠTENJE: filmRepo
             var sortirano = MergeSort(filmRepo.GetAll(), isLess);
             PrikaziListuFilmova(sortirano, $"Sortirana Lista (Ocjena - {(smjerRastuci ? "Rastuće" : "Opadajuće")}");
         }
@@ -482,7 +472,6 @@ namespace FilmMate.Services
             else
                 isLess = (f1, f2) => f1.getGodina() > f2.getGodina();
 
-            // KORIŠTENJE: filmRepo
             var sortirano = MergeSort(filmRepo.GetAll(), isLess);
             PrikaziListuFilmova(sortirano, $"Sortirana Lista (Godina - {(smjerRastuci ? "Rastuće" : "Opadajuće")}");
         }
@@ -495,14 +484,13 @@ namespace FilmMate.Services
             else
                 isLess = (f1, f2) => string.Compare(f1.getNazivFilma(), f2.getNazivFilma()) > 0;
 
-            // KORIŠTENJE: filmRepo
+            
             var sortirano = MergeSort(filmRepo.GetAll(), isLess);
             PrikaziListuFilmova(sortirano, $"Sortirana Lista (Naziv - {(smjerRastuci ? "Rastuće" : "Opadajuće")}");
         }
 
         public void PrikaziJedinstveneKategorije()
         {
-            // KORIŠTENJE: filmRepo
             if (filmRepo.GetAll().Count == 0)
             {
                 Console.WriteLine("Nema filmova, nema ni kategorija.");
@@ -541,7 +529,6 @@ namespace FilmMate.Services
 
         public virtual void prikaziFilmove()
         {
-            // KORIŠTENJE: filmRepo
             PrikaziListuFilmova(filmRepo.GetAll(), "Svi Filmovi u Bazi");
         }
     }

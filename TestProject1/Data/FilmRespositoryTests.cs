@@ -9,7 +9,7 @@ using TestProject1.TestData;
 namespace TestProject1.Data
 {
     [TestClass]
-    //[DoNotParallelize]
+
     public class FilmRepositoryTests
     {
         private string tempFile;
@@ -17,7 +17,7 @@ namespace TestProject1.Data
         [TestInitialize]
         public void Setup()
         {
-            // kreiramo privremeni fajl za test
+            
             tempFile = Path.GetTempFileName();
         }
 

@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 [TestFixture]
-//[DoNotParallelize]
+
 public class FilmServiceRateTests
 {
     private Mock<IFilmRepository> mockRepo;
@@ -69,11 +69,9 @@ public class FilmServiceRateTests
 
         service.OcijeniFilmGledaoca();
 
-        // 1. Verifikacija Mocka: da li je Save() pozvan uopste
         mockRepo.Verify(repo => repo.Sacuvaj(), Times.Once,
       "Repo.Sacuvaj() mora biti pozvan nakon uspješnog ocenjivanja.");
 
-        // 2. Verifikacija logike: da li je ocena filma ažurirana
         var avatarFilm = lazniFilmovi.FirstOrDefault(f => f.getNazivFilma() == "Avatar");
 
         // Očekivano: (8 + 10) / 2 = 9.0
@@ -86,7 +84,7 @@ public class FilmServiceRateTests
         );
     }
 
-    // Test: Sacuvaj() metoda se NE poziva za neispravnu ocenu
+
     [Test]
     public void OcijeniFilmGledaoca_InvalidRating_DoesNotCallSave()
     {

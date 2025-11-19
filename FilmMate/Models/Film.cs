@@ -10,7 +10,7 @@ namespace FilmMate.Models
     {
         private string nazivFilma;
         private string kategorija;
-        private List<int> ocjene; // Lista ocjena za izračun prosjeka
+        private List<int> ocjene; 
         private int godinaIzlaska;
 
         public Film(string naziv, string kat, double pocetnaOcjena, int god)
@@ -27,7 +27,6 @@ namespace FilmMate.Models
             }
         }
 
-        // GET METODE
         public string getNazivFilma() => nazivFilma;
         public string getKategorija() => kategorija;
         public int getGodina() => godinaIzlaska;
