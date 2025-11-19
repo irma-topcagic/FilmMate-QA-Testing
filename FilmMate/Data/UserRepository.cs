@@ -9,16 +9,20 @@ using FilmMate.Models;
 
 namespace FilmMate.Data
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private string filePath = "korisnici.txt";
         private List<Korisnik> korisnici = new List<Korisnik>();
 
-        public UserRepository() => Ucitaj();
+        public UserRepository(string path = "korisnici.txt")
+        {
+            this.filePath = path;
+            Ucitaj();
+        }
 
         private void Ucitaj()
         {
-            // Očistiti listu prije ponovnog učitavanja, iako je nova instanca
+            
             korisnici.Clear();
 
             if (!File.Exists(filePath)) return;
@@ -46,10 +50,11 @@ namespace FilmMate.Data
                 string tip = (k is Administrator) ? "admin" : "user";
                 lines.Add($"{k.getKorisnickoIme()};{k.getLozinka()};{tip}");
             }
-            // File.WriteAllLines se automatski zatvara i oslobađa handle
             File.WriteAllLines(filePath, lines);
         }
 
         public List<Korisnik> GetAll() => korisnici;
+
+
     }
 }

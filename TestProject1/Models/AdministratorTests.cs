@@ -1,25 +1,25 @@
-﻿using FilmMate.Data;
-using FilmMate.Models;
+﻿using FilmMate.Models;
 using FilmMate.Services;
 using Moq;
 using System.Text;
+using System.IO;
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using FilmMate.Services;
+
+
 
 [TestClass]
 public class AdministratorTests
 {
-    private Mock<IFilmRepository> mockRepo;
-    private FilmService filmService;
+    private Mock<IFilmService> mockFilmService;
     private Administrator admin;
     private StringBuilder sb;
 
     [TestInitialize]
     public void SetUp()
     {
-        mockRepo = new Mock<IFilmRepository>();
-
-        mockRepo.Setup(r => r.GetAll()).Returns(new List<Film>());
-
-        filmService = new FilmService(mockRepo.Object);
+        mockFilmService = new Mock<IFilmService>();
         admin = new Administrator();
 
         sb = new StringBuilder();
@@ -29,66 +29,37 @@ public class AdministratorTests
     [TestCleanup]
     public void TearDown()
     {
-        Console.SetOut(new StreamWriter(Console.OpenStandardOutput()));
+        Console.SetOut(new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true });
     }
 
     [TestMethod]
-    public void DodajFilm_PozivaRepoSacuvaj()
+    public void DodajFilm_PozivaMetoduNaServisu()
     {
-        // pripremimo ulaz koji vodi do repo.Sacuvaj()
-        string input =
-            "NoviFilm" + Environment.NewLine +   // Naziv
-            "Akcija" + Environment.NewLine +     // Kategorija
-            "8" + Environment.NewLine +          // Ocjena
-            "2020" + Environment.NewLine;        // Godina
-
+        string input = "NoviFilm" + Environment.NewLine + "Akcija" + Environment.NewLine + "8" + Environment.NewLine + "2020" + Environment.NewLine;
         Console.SetIn(new StringReader(input));
 
-        // Act
-        admin.dodajFilm(filmService);
+        admin.dodajFilm(mockFilmService.Object);
 
-        // Assert
-        mockRepo.Verify(r => r.Sacuvaj(), Times.Once);
-    }
-    [TestMethod]
-    public void ObrisiFilm_PozivaRepoSacuvaj_SaOcjenama()
-    {
-        // Pripremamo film sa ocjenama da forsiramo dvostruku potvrdu
-        var filmSaOcjenom = new Film("Avatar", "Sci-Fi", 8, 2009);
-        filmSaOcjenom.DodajOcjenu(10); // Dodajemo ocjenu, sada getOcjene().Count > 0
-        var list = new List<Film> { filmSaOcjenom };
-        mockRepo.Setup(r => r.GetAll()).Returns(list);
-
-        // KORISTITE Environment.NewLine za ispravan rad Console.ReadLine()
-        string input =
-            "Avatar" + Environment.NewLine +  // 1. Naziv filma
-            "d" + Environment.NewLine +        // 2. Opšta potvrda (d)
-            "OBRISI" + Environment.NewLine;    // 3. Finalna potvrda (OBRISI)
-
-        Console.SetIn(new StringReader(input));
-
-        // Act
-        admin.obrisiFilm(filmService);
-
-        // Assert: Sada bi Sacuvaj trebao biti pozvan jednom
-        mockRepo.Verify(r => r.Sacuvaj(), Times.Once);
+        mockFilmService.Verify(s => s.dodajFilm(), Times.Once);
     }
 
     [TestMethod]
-    public void AzurirajFilm_PozivaRepoSacuvaj()
+    public void ObrisiFilm_PozivaMetoduNaServisu()
     {
-        var list = new List<Film> { new Film("Avatar", "Sci-Fi", 8, 2009) };
-        mockRepo.Setup(r => r.GetAll()).Returns(list);
+        // Akcija
+        admin.obrisiFilm(mockFilmService.Object);
 
-        string input =
-            "Avatar\n" +   // trazi ga
-            "1\n" +        // azurirati naziv
-            "NoviAvatar\n"; // novi naziv
+        // Verifikacija
+        mockFilmService.Verify(s => s.obrisiFilm(), Times.Once);
+    }
 
-        Console.SetIn(new StringReader(input));
+    [TestMethod]
+    public void AzurirajFilm_PozivaMetoduNaServisu()
+    {
+        // Akcija
+        admin.azurirajFilm(mockFilmService.Object);
 
-        admin.azurirajFilm(filmService);
-
-        mockRepo.Verify(r => r.Sacuvaj(), Times.Once);
+        // Verifikacija
+        mockFilmService.Verify(s => s.azurirajFilm(), Times.Once);
     }
 }

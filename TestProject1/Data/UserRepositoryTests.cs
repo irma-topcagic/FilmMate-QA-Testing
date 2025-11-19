@@ -135,7 +135,7 @@ namespace TestProject1.Data
                 "admin2;adminpass2;admin"
             };
             File.WriteAllLines(originalFilePath, lines);
-
+            
             var repo = new UserRepository();
 
             Assert.AreEqual(2, repo.GetAll().Count, "Trebalo bi učitati samo 2 validna korisnika.");
