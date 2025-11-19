@@ -13,6 +13,7 @@ using System.IO;
 namespace TestProject1.UI
 {
     [TestClass]
+    [DoNotParallelize]
     public class SortirajMeniTests
     {
         private Mock<IFilmRepository> mockRepo;

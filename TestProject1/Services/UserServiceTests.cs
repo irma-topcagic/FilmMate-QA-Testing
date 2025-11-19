@@ -12,6 +12,7 @@ using System.Text;
 namespace TestProject1.Services
 {
     [TestClass]
+    [DoNotParallelize]
     public class UserServiceTests
     {
         // Koristimo isti pristup za fajl operacije kao u UserRepositoryTests

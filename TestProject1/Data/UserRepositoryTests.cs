@@ -11,6 +11,7 @@ using System.Threading; // Dodato za Thread.Sleep
 namespace TestProject1.Data
 {
     [TestClass]
+    [DoNotParallelize]
     public class UserRepositoryTests
     {
         private string originalFilePath = "korisnici.txt";

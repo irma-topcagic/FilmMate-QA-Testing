@@ -9,6 +9,7 @@ using TestProject1.TestData;
 namespace TestProject1.Data
 {
     [TestClass]
+    [DoNotParallelize]
     public class FilmRepositoryTests
     {
         private string tempFile;
