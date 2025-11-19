@@ -4,6 +4,7 @@ using FilmMate.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TestProject1.TestData;
 
 namespace TestProject1.Data
 {
@@ -77,7 +78,6 @@ namespace TestProject1.Data
             Assert.AreEqual("Test2;Komedija;7;2021", lines[1]);
         }
 
-        // --------------------- TEST: GetAll -----------------------
         [TestMethod]
         public void GetAll_TrebaVratitiInternuListu()
         {
@@ -91,7 +91,7 @@ namespace TestProject1.Data
         }
 
 
-        // --- Pomoćna klasa koja dopušta setovanje putanje fajla ---
+      
         private class TestableFilmRepository : FilmRepository
         {
             public TestableFilmRepository(string path)
@@ -102,21 +102,5 @@ namespace TestProject1.Data
         }
     }
 
-    // =================== EXTENZIJE ZA TESTIRANJE =====================
-    public static class FilmRepositoryExtensions
-    {
-        public static void SetFilePath(this FilmRepository repo, string path)
-        {
-            typeof(FilmRepository)
-                .GetField("filePath", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .SetValue(repo, path);
-        }
-
-        public static void InvokeLoad(this FilmRepository repo)
-        {
-            typeof(FilmRepository)
-                .GetMethod("UcitajFilmove", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                .Invoke(repo, null);
-        }
-    }
+ 
 }

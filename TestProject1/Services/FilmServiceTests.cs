@@ -727,9 +727,7 @@ public class FilmServiceRateTests
         StringAssert.Contains(consoleOutput.ToString(), "Neispravan format ocjene.");
     }
 
-    // ============================================
-    // DODATNI TESTOVI ZA SORTIRANJE PO NAZIVU
-    // ============================================
+   
 
 
 
