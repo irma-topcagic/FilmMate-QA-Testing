@@ -52,14 +52,15 @@ namespace FilmMate.Models
 
         public void setGodina(int g) => godinaIzlaska = g;
 
-        
+
         public void DodajOcjenu(int ocjena)
         {
-            if (ocjena >= 1 && ocjena <= 10)
-            {
-                ocjene.Add(ocjena);
-            }
+            if (ocjena < 1 || ocjena > 10)
+                throw new ArgumentException("Ocjena mora biti 1–10.");
+
+            ocjene.Add(ocjena);
         }
+
 
         public override string ToString()
         {
