@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 
 [TestFixture]
-[DoNotParallelize]
+//[DoNotParallelize]
 public class FilmServiceRateTests
 {
     private Mock<IFilmRepository> mockRepo;

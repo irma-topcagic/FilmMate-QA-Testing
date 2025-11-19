@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
 using System.Security.Cryptography;
 using FilmMate.Models;
 using FilmMate.Data;
@@ -19,29 +15,24 @@ namespace FilmMate.Services
             userRepo = repo;
         }
 
-        public void Registracija()
+        // =========================================
+        // Registracija
+        // =========================================
+        public void Registracija(TextReader input, TextWriter output)
         {
-            Console.Write("Korisničko ime: ");
-            string ime = Console.ReadLine() ?? "";
+            output.Write("Korisničko ime: ");
+            string ime = input.ReadLine() ?? "";
 
-            bool postoji = false;
-            foreach (var k in userRepo.GetAll())
-            {
-                if (k.getKorisnickoIme().ToLower() == ime.ToLower())
-                {
-                    postoji = true;
-                    break;
-                }
-            }
+            bool postoji = userRepo.GetAll().Exists(k => k.getKorisnickoIme().Equals(ime, StringComparison.OrdinalIgnoreCase));
 
             if (postoji)
             {
-                Console.WriteLine("Korisnik već postoji!");
+                output.WriteLine("Korisnik već postoji!");
                 return;
             }
 
-            Console.Write("Lozinka: ");
-            string pass = Console.ReadLine() ?? "";
+            output.Write("Lozinka: ");
+            string pass = input.ReadLine() ?? "";
             string hash = GenerisiHash(pass);
 
             Gledalac novi = new Gledalac();
@@ -50,36 +41,35 @@ namespace FilmMate.Services
 
             userRepo.GetAll().Add(novi);
             userRepo.Sacuvaj();
-            Console.WriteLine("Registracija uspješna!");
+            output.WriteLine("Registracija uspješna!");
         }
 
-        public Korisnik? Prijava()
+        // =========================================
+        // Prijava
+        // =========================================
+        public Korisnik? Prijava(TextReader input, TextWriter output)
         {
-            Console.Write("Korisničko ime: ");
-            string ime = Console.ReadLine() ?? "";
-            Console.Write("Lozinka: ");
-            string pass = Console.ReadLine() ?? "";
+            output.Write("Korisničko ime: ");
+            string ime = input.ReadLine() ?? "";
+            output.Write("Lozinka: ");
+            string pass = input.ReadLine() ?? "";
 
             string hash = GenerisiHash(pass);
-            Korisnik? korisnik = null;
 
-            foreach (var k in userRepo.GetAll())
-            {
-                if (k.getKorisnickoIme() == ime && k.getLozinka() == hash)
-                {
-                    korisnik = k;
-                    break;
-                }
-            }
+            Korisnik? korisnik = userRepo.GetAll()
+                .Find(k => k.getKorisnickoIme() == ime && k.getLozinka() == hash);
 
             if (korisnik == null)
-                Console.WriteLine("Pogrešno korisničko ime ili lozinka!");
+                output.WriteLine("Pogrešno korisničko ime ili lozinka!");
             else
-                Console.WriteLine($"Dobrodošao {korisnik.getKorisnickoIme()}");
+                output.WriteLine($"Dobrodošao {korisnik.getKorisnickoIme()}");
 
             return korisnik;
         }
 
+        // =========================================
+        // Generisanje SHA256 heša
+        // =========================================
         private string GenerisiHash(string lozinka)
         {
             using var sha = SHA256.Create();
@@ -90,4 +80,3 @@ namespace FilmMate.Services
         }
     }
 }
-
