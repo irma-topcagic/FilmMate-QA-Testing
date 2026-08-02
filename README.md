@@ -1,29 +1,31 @@
-# 🎬 FilmMate – QA & Testing Showcase
+# FilmMate – QA & Testing Project
 
-## 📌 Project Overview
-**FilmMate** is a C# console application designed to demonstrate a complete **Software Quality Assurance (SQA)** lifecycle. The project showcases how to transform a functional prototype into a robust, tested, and optimized system using industry-standard engineering practices.
+## Project Overview
 
----
+FilmMate is a C# console application developed to demonstrate software quality assurance and testing practices. The project focuses on improving software reliability through automated testing, code analysis, and refactoring techniques.
 
-## 🧪 Testing & QA Methodologies
+## Testing & QA Methodologies
 
-This repository is primarily focused on quality engineering and contains:
+The project includes different testing approaches and quality assurance activities:
 
-### 🔴 Test-Driven Development (TDD)
-The core logic was developed using the **Red-Green-Refactor** cycle. Initial tests were written in the `TDDProject` before any functional code was implemented.
+### Test-Driven Development (TDD)
 
-### 🧪 Unit Testing
-Comprehensive unit testing was performed to validate the smallest parts of the application.
-* **Test Suites:** Located in `UnitProject`.
-* **Coverage:** Includes validation for film management, user roles, and service logic.
-* **Automation:** Tests are structured to be easily executed via Visual Studio Test Explorer.
+The application logic was developed using the Red-Green-Refactor cycle. Tests were created first in the `TDDProject` and then used to guide the implementation of the required functionality.
 
-### 🔍 Structural & Functional Testing
-* **White-Box Testing:** Comprehensive analysis of the internal code structure, including statement and branch coverage.
-* **Black-Box Testing:** Functional verification of requirements, focused on input/output scenarios and edge cases.
+### Unit Testing
 
-### ⚙️ Code Tuning & Refactoring
-* **Refactoring:** Improved code maintainability and readability by applying **SOLID** principles.
-* **Performance Tuning:** Optimization of logic to reduce resource consumption and improve execution speed.
+Unit tests were implemented using NUnit to verify individual components and application logic.
 
----
+- Test suites are located in the `UnitProject` folder.
+- Tests cover film management, user roles, and service functionality.
+- Tests can be executed using Visual Studio Test Explorer.
+
+### Structural and Functional Testing
+
+- **White-box testing:** Analysis of internal code structure, including statement and branch coverage.
+- **Black-box testing:** Validation of application behavior based on requirements, inputs, and expected outputs.
+
+### Code Tuning and Refactoring
+
+- Refactored existing code by applying SOLID principles to improve readability and maintainability.
+- Optimized selected parts of the application to improve performance and reduce unnecessary operations.
