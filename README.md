@@ -14,7 +14,7 @@ The application logic was developed using the Red-Green-Refactor cycle. Tests we
 
 ### Unit Testing
 
-Unit tests were implemented using NUnit to verify individual components and application logic.
+Unit tests were implemented using MSTest to verify individual components and application logic.
 
 - Test suites are located in the `UnitProject` folder.
 - Tests cover film management, user roles, and service functionality.
